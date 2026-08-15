@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050B16" />
+  <title>CHAOS API — Call Scatter Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <div class="brand-text">CHAOS <span>API</span></div>
+        <button class="icon-btn sidebar-close" id="mobileClose" aria-label="Close menu"><i data-lucide="x"></i></button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">MAIN</div>
+        <a class="nav-item" href="#" data-page="Dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="nav-item" href="#" data-page="Whitelist IP"><i data-lucide="shield-check"></i><span>Whitelist IP</span></a>
+        <a class="nav-item" href="#" data-page="Server Status"><i data-lucide="activity"></i><span>Server Status</span></a>
+
+        <div class="nav-section">AGENT MANAGEMENT</div>
+        <button class="nav-item nav-toggle" type="button"><i data-lucide="settings-2"></i><span>Agent Manage</span><i class="chevron" data-lucide="chevron-down"></i></button>
+        <div class="submenu">
+          <a href="#">Agent List</a>
+          <a href="#">Agent Transaction</a>
+          <a href="#">Agent History</a>
+        </div>
+
+        <div class="nav-section">CALL SCATTER MANAGEMENT</div>
+        <a class="nav-item active" href="#"><i data-lucide="radio-tower"></i><span>Call Scatter</span></a>
+        <div class="submenu open">
+          <a class="active-sub" href="#">Call Scatter List</a>
+          <a href="#">Call History</a>
+          <a href="#">Provider Settings</a>
+        </div>
+
+        <div class="nav-section">PRODUCT MANAGEMENT</div>
+        <a class="nav-item" href="#"><i data-lucide="package"></i><span>Product List</span></a>
+        <a class="nav-item" href="#"><i data-lucide="gamepad-2"></i><span>Game Management</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="server-pill"><span class="pulse"></span><div><strong>API Server</strong><small>Operational</small></div></div>
+      </div>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="menuBtn" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+        <div class="search-wrap">
+          <i data-lucide="search"></i>
+          <input id="globalSearch" type="search" placeholder="Search agent, WhatsApp, provider, game..." autocomplete="off">
+          <kbd>Ctrl K</kbd>
+        </div>
+        <div class="top-actions">
+          <div class="dropdown-wrap">
+            <button class="icon-btn notification-btn" id="notificationBtn" aria-label="Notifications"><i data-lucide="bell"></i><span>1</span></button>
+            <div class="dropdown notification-dropdown" id="notificationMenu">
+              <div class="dropdown-head"><strong>Notifications</strong><span>1 new</span></div>
+              <div class="notice"><div class="notice-icon"><i data-lucide="radio"></i></div><div><strong>Scatter call ready</strong><p>1 setting is pending review.</p><small>Just now</small></div></div>
+            </div>
+          </div>
+          <button class="icon-btn" id="appsBtn" aria-label="Apps"><i data-lucide="grid-2x2"></i></button>
+          <div class="dropdown-wrap">
+            <button class="profile-btn" id="profileBtn"><span class="avatar">C</span><span class="profile-name">CHAOS</span><i data-lucide="chevron-down"></i></button>
+            <div class="dropdown profile-dropdown" id="profileMenu">
+              <div class="profile-card"><span class="avatar large">C</span><div><strong>CHAOS Admin</strong><small>Administrator</small></div></div>
+              <button><i data-lucide="user"></i> Profile</button>
+              <button><i data-lucide="settings"></i> Settings</button>
+              <button><i data-lucide="log-out"></i> Sign out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="page-heading">
+          <div>
+            <div class="breadcrumb"><span>Management</span><i data-lucide="chevron-right"></i><strong>Call Scatter</strong></div>
+            <h1>Call Scatter Management</h1>
+            <p>Manage provider, game, WhatsApp user, and scatter call settings.</p>
+          </div>
+          <div class="heading-actions">
+            <button class="secondary-btn" id="addAgentBtn"><i data-lucide="user-plus"></i> Add Agent</button>
+            <button class="primary-btn" id="addBtn"><i data-lucide="plus"></i> Add Call Scatter</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card"><div class="stat-icon cyan"><i data-lucide="radio-tower"></i></div><div><small>Total Settings</small><strong id="statTotal">0</strong></div></div>
+          <div class="stat-card"><div class="stat-icon green"><i data-lucide="circle-check"></i></div><div><small>Active</small><strong id="statActive">0</strong></div></div>
+          <div class="stat-card"><div class="stat-icon yellow"><i data-lucide="clock-3"></i></div><div><small>Pending</small><strong id="statPending">0</strong></div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i data-lucide="gamepad-2"></i></div><div><small>Providers</small><strong id="statProviders">0</strong></div></div>
+        </div>
+
+        <div class="toolbar card">
+          <div class="filter-search">
+            <i data-lucide="search"></i>
+            <input id="tableSearch" type="search" placeholder="Search call scatter...">
+          </div>
+          <div class="filters">
+            <select id="providerFilter"><option value="all">All Providers</option></select>
+            <select id="statusFilter"><option value="all">All Status</option><option value="Active">Active</option><option value="Pending">Pending</option><option value="Inactive">Inactive</option></select>
+            <select id="callTypeFilter"><option value="all">All Call Types</option><option value="Scatter">Scatter</option><option value="Jackpot">Jackpot</option><option value="Bonus">Bonus</option></select>
+          </div>
+        </div>
+
+        <section class="agent-card card">
+          <div class="table-head">
+            <div>#</div><div>AGENT</div><div>SETTINGS</div><div>STATUS</div><div>CREATED</div><div>ACTION</div>
+          </div>
+          <div id="agentRows"></div>
+          <div class="empty-state" id="emptyState" hidden>
+            <i data-lucide="search-x"></i>
+            <strong>No call scatter found</strong>
+            <span>Try another keyword or filter.</span>
+          </div>
+          <div class="pagination" id="pagination"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><div><h2 id="modalTitle">Add Call Scatter</h2><p>Configure a scatter call for an agent.</p></div><button class="icon-btn" id="modalClose"><i data-lucide="x"></i></button></div>
+      <form id="scatterForm">
+        <input type="hidden" id="recordId">
+        <div class="form-grid">
+          <label>Agent<select id="agentInput" required></select></label>
+          <label>WhatsApp User<input id="whatsappInput" placeholder="08929292929" required></label>
+          <label>Game Provider<select id="providerInput" required></select></label>
+          <label>Game Name<select id="gameInput" required></select></label>
+          <label>Call Type<select id="callTypeInput"><option>Scatter</option><option>Jackpot</option><option>Bonus</option></select></label>
+          <label>Target<input id="targetInput" placeholder="2+ Scatter"></label>
+          <label>Status<select id="statusInput"><option>Active</option><option>Pending</option><option>Inactive</option></select></label>
+          <label>Created Date<input id="createdInput" type="datetime-local" required></label>
+          <label class="full">Note<textarea id="noteInput" rows="3" placeholder="Optional note..."></textarea></label>
+        </div>
+        <div class="modal-actions"><button type="button" class="secondary-btn" id="cancelBtn">Cancel</button><button class="primary-btn" type="submit"><i data-lucide="save"></i> Save Setting</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="deleteBackdrop">
+    <div class="modal small-modal">
+      <div class="danger-icon"><i data-lucide="trash-2"></i></div>
+      <h2>Delete Call Scatter?</h2>
+      <p>Are you sure you want to delete this setting? This action cannot be undone.</p>
+      <div class="modal-actions"><button class="secondary-btn" id="deleteCancel">Cancel</button><button class="danger-btn" id="deleteConfirm"><i data-lucide="trash-2"></i> Delete</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><div class="toast-icon"><i data-lucide="check"></i></div><div><strong id="toastTitle">Success</strong><span id="toastText">Done</span></div></div>
+
+  <button class="chat-fab" id="chatFab" aria-label="Support"><i data-lucide="message-square"></i></button>
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-head"><div><strong>Support</strong><small>Usually replies instantly</small></div><button class="icon-btn" id="chatClose"><i data-lucide="x"></i></button></div>
+    <div class="chat-body"><div class="chat-message">Hi! Need help with Call Scatter settings?</div></div>
+    <div class="chat-input"><input placeholder="Write a message..."><button><i data-lucide="send"></i></button></div>
+  </div>
+
+
+  <div class="modal-backdrop" id="agentModal">
+    <div class="modal agent-modal" role="dialog" aria-modal="true" aria-labelledby="agentModalTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="agentModalTitle">Add Agent</h2>
+          <p>Customize your agent name and account details.</p>
+        </div>
+        <button class="icon-btn" id="agentModalClose" aria-label="Close"><i data-lucide="x"></i></button>
+      </div>
+      <form id="agentForm">
+        <input type="hidden" id="agentId">
+        <div class="form-grid">
+          <label>Agent Name<input id="agentName" maxlength="40" required placeholder="e.g. ClaudiaChesaa"></label>
+          <label>Username<input id="agentUsername" maxlength="40" required placeholder="e.g. agent_claudia"></label>
+          <label>Level
+            <select id="agentLevel"><option>HEAD</option><option>ADMIN</option><option>AGENT</option><option>SUB</option></select>
+          </label>
+          <label>Status
+            <select id="agentStatus"><option>Active</option><option>Pending</option><option>Inactive</option></select>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="agentCancel">Cancel</button>
+          <button type="submit" class="primary-btn"><i data-lucide="save"></i> Save Agent</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
